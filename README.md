@@ -8,38 +8,22 @@
 [![License][license-shield]][license-url]
 
 
----
-
-Replace the following variables and remove this section:
-
-```github_username```
-```repo_name```
-
-```project_title```
-```project_description```
-```project_license```
-
-```_proj_images/logo.webp```
-
----
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/xishu-collection/CLI-pic2webp">
     <img src="_proj_images/logo.webp" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">CLI-pic2webp</h3>
 
   <p align="center">
-    project_description
+    A command-line tool only focus converting photos and images to WebP format directly on your local machine.
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug">Report Bugs</a>
+    <a href="https://github.com/xishu-collection/CLI-pic2webp/issues/new?labels=bug">Report Bugs</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement">Request Features</a>
+    <a href="https://github.com/xishu-collection/CLI-pic2webp/issues/new?labels=enhancement">Request Features</a>
   </p>
 </div>
 
@@ -81,7 +65,16 @@ Replace the following variables and remove this section:
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-TBD...
+This is a nodejs integration project of converting photos and images to WebP format on your local machine.
+
+Why is this CLI necessary? 
+
+Because your photos or images always contain sensitive information from you
+that shouldn’t be passed thru the internet (where privacy isn’t guaranteed) -- but only on your own machine, where you maintain full control.
+
+This is a handy tool to help you to do that.
+
+There is no network connection function in this tool.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,18 +82,8 @@ TBD...
 
 ### Built With
 
-* [![.ENV][.ENV]][.ENV-url]
-* [![Npm][npm]][npm-url]
 * [![Pnpm][pnpm]][pnpm-url]
-* [![Webpack][webpack]][webpack-url]
 * [![Node][Node.js]][Node-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![JQuery][JQuery.com]][JQuery-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![Fontawesome][Fontawesome.com]][Fontawesome-url]
-* [![Electron][Electronjs.org]][Electronjs-url]
-* [![MySQL][MySQL.com]][MySQL-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -112,22 +95,18 @@ TBD...
 
 ### Prerequisites
 
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* ```pnpm``` environment setup
 
 ### Installation
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/xishu-collection/CLI-pic2webp.git
    ```
 2. Install the dependencies
    ```sh
-   npm install
+   pnpm install
    ```
-3. TBD
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -136,8 +115,32 @@ TBD...
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-> Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-_For more examples, please refer to the [Documentation]()_
+```
+CLI > npm start
+
+> pic2webp@1.0.0 start
+> node convert2webp.js
+
+Welcome to the Image to WebP Converter!
+
+Usage examples:
+  - Convert single file: -i <file path>
+  - Convert directory: -d <directory path>
+  - More parameters, View help: h or help
+  - Exit program: exit or quit
+
+Please enter command parameters: h
+Usage: convert2webp [options]
+
+Options:
+  -i, --input <path>       Input file path
+  -d, --directory <path>   Input directory path (choose one with -i)
+  -o, --output <path>      Output directory path (if not specified, just use the same folder from -i or -d)
+  -q, --quality <number>   Image quality (1-100) (default: "80")
+  -l, --lossless <number>  Compression level (1: lossy, 2: medium, 3: lossless) (default: "1")
+  -m, --minimal <boolean>  Force minimal file size regardless of compression level (default: "false")
+  -h, --help               display help for command
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -146,8 +149,10 @@ _For more examples, please refer to the [Documentation]()_
 <!-- ROADMAP -->
 ## Backlogs
 
-- [ ] TBD
-- [ ] TBD
+- [x] only focus on the .webp format
+- [x] provide handy cli usage (console summary)
+- [ ] monitor one folder to automatically convert the pictures to the .webp format
+- [ ] binary executable file for different platforms
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -156,8 +161,8 @@ _For more examples, please refer to the [Documentation]()_
 <!-- CONTRIBUTING -->
 ## Issue and PR
 
-- Let me know if you've found an [issue](https://github.com/github_username/repo_name/issues/new).
-- Let me know if you needs new [enhancement](https://github.com/github_username/repo_name/issues/new?labels=enhancement).
+- Let me know if you've found an [issue](https://github.com/xishu-collection/CLI-pic2webp/issues/new).
+- Let me know if you needs new [enhancement](https://github.com/xishu-collection/CLI-pic2webp/issues/new?labels=enhancement).
 - Any contributions you make are **Welcomed and Greatly Appreciated**.
 	1. Fork the project and clone to your local
 	2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -171,8 +176,8 @@ _For more examples, please refer to the [Documentation]()_
 
 ### Contributors:
 
-<a href="https://github.com/github_username/repo_name/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=github_username/repo_name" alt="contrib.rocks image" />
+<a href="https://github.com/xishu-collection/CLI-pic2webp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=xishu-collection/CLI-pic2webp" alt="contrib.rocks image" />
 </a>
 
 
@@ -193,7 +198,7 @@ Distributed under the MIT.
 
 XISHU - twitter: [@shallowlong](https://x.com/shallowlong) - email: shallowlong@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/xishu-collection/CLI-pic2webp](https://github.com/xishu-collection/CLI-pic2webp)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -210,15 +215,15 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/xishu-collection/CLI-pic2webp.svg?style=for-the-badge
+[contributors-url]: https://github.com/xishu-collection/CLI-pic2webp/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/xishu-collection/CLI-pic2webp.svg?style=for-the-badge
+[forks-url]: https://github.com/xishu-collection/CLI-pic2webp/network/members
+[stars-shield]: https://img.shields.io/github/stars/xishu-collection/CLI-pic2webp.svg?style=for-the-badge
+[stars-url]: https://github.com/xishu-collection/CLI-pic2webp/stargazers
+[issues-shield]: https://img.shields.io/github/issues/xishu-collection/CLI-pic2webp.svg?style=for-the-badge
+[issues-url]: https://github.com/xishu-collection/CLI-pic2webp/issues
+[license-shield]: https://img.shields.io/github/license/xishu-collection/CLI-pic2webp.svg?style=for-the-badge
 [license-url]: LICENSE
 
 
