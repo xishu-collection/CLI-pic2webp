@@ -99,6 +99,7 @@ There is no network connection function in this tool.
 
 ### Installation
 
+#### Local build:
 1. Clone the repo
    ```sh
    git clone https://github.com/xishu-collection/CLI-pic2webp.git
@@ -108,6 +109,9 @@ There is no network connection function in this tool.
    pnpm install
    ```
 
+#### Binary executable file:
+TBD
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -116,7 +120,7 @@ There is no network connection function in this tool.
 ## Usage
 
 ```
-CLI > npm start
+CLI > pnpm start
 
 > pic2webp@1.0.0 start
 > node convert2webp.js
@@ -126,11 +130,12 @@ Welcome to the Image to WebP Converter!
 Usage examples:
   - Convert single file: -i <file path>
   - Convert directory: -d <directory path>
-  - More parameters, View help: h or help
+  - More parameters, view help: -h/h or --help/help
   - Exit program: exit or quit
 
+
 Please enter command parameters: h
-Usage: convert2webp [options]
+Usage:  [options]
 
 Options:
   -i, --input <path>       Input file path
@@ -140,6 +145,33 @@ Options:
   -l, --lossless <number>  Compression level (1: lossy, 2: medium, 3: lossless) (default: "1")
   -m, --minimal <boolean>  Force minimal file size regardless of compression level (default: "false")
   -h, --help               display help for command
+
+
+Please enter command parameters: -d D:\test
+Parameter check passed, preparing to start processing...
+Found 6 files, starting conversion...
+× Conversion failed [a.pdf]: Input file contains unsupported image format
+× Conversion failed [b.mp4]: Input file contains unsupported image format
+√ Conversion successful: c.jpg -> c-generated.webp
+√ Conversion successful: d.jpg -> d-generated.webp
+√ Conversion successful: e.png -> e-generated.webp
+√ Conversion successful: f.png -> f-generated.webp
+
+Conversion completed! Success: 4 file(s), Time: 1.5s
+
+
+Please enter command parameters: -i D:\g.jpg
+Parameter check passed, preparing to start processing...
+√ Conversion successful: g.jpg -> g-generated.webp
+
+Conversion completed! Success: 1 file(s), Time: 1.1s
+
+
+Please enter command parameters: -i D:\g.jpg
+Parameter check passed, preparing to start processing...
+√ Conversion successful: g.jpg -> g-generated1.webp
+
+Conversion completed! Success: 1 file(s), Time: 1.1s
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
