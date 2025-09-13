@@ -1,20 +1,8 @@
-#!/usr/bin/env node
 const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
 const sharp = require('sharp');
-const { program } = require('commander');
-
-program
-	.option('-i, --input <path>', 'Input file path')
-	.option('-d, --directory <path>', 'Input directory path (choose one with -i)')
-	.option('-o, --output <path>', 'Output directory path (if not specified, just use the same folder from -i or -d)')
-	.option('-q, --quality <number>', 'Image quality (1-100)', '80')
-	.option('-l, --lossless <number>', 'Compression level (1: lossy, 2: medium, 3: lossless)', '1')
-	.option('-m, --minimal <boolean>', 'Force minimal file size regardless of compression level', 'false')
-	.parse(process.argv);
-
-const options = program.opts();
+const { createCommand } = require('commander');
 
 function prepareWebpOptions(quality, losslessLevel, minimal) {
 	const webpOption = {
@@ -43,26 +31,43 @@ function prepareWebpOptions(quality, losslessLevel, minimal) {
 	return webpOption;
 }
 
+function getUniqueOutputPath(outputDir, baseName, extension) {
+	let counter = 1;
+	let candidatePath = path.join(outputDir, `${baseName}${extension}`);
+
+	while (fs.existsSync(candidatePath)) {
+		candidatePath = path.join(outputDir, `${baseName}${counter}${extension}`);
+		counter++;
+	}
+
+	return {
+		path: candidatePath,
+		fileName: path.basename(candidatePath)
+	};
+}
+
 async function processFile(inputFile, outputDir, webpOption) {
+	const parsed = path.parse(inputFile);
 	try {
 		const metadata = await sharp(inputFile).metadata();
 		if (!metadata.format) {
-			console.error(`Error: File ${path.basename(inputFile)} is not a supported image type`);
+			console.error(`Error: File ${parsed.base} is not a supported image type`);
 			return false;
 		}
 
-		const parsed = path.parse(inputFile);
-		const outputFileName = `${parsed.name}-trans.webp`;
-		const outputFilePath = path.join(outputDir, outputFileName);
+		const baseName = `${parsed.name}-generated`;
+		const extension = '.webp';
+
+		const { path: outputFilePath, fileName: outputFileName } = getUniqueOutputPath(outputDir, baseName, extension);
 
 		await sharp(inputFile)
 			.webp(webpOption)
 			.toFile(outputFilePath);
 
-		console.log(`✓ Conversion successful: ${path.basename(inputFile)} -> ${outputFileName}`);
+		console.log(`√ Conversion successful: ${parsed.base} -> ${outputFileName}`);
 		return true;
 	} catch (error) {
-		console.error(`✗ Conversion failed [${path.basename(inputFile)}]: ${error.message}`);
+		console.error(`× Conversion failed [${parsed.base}]: ${error.message}`);
 		return false;
 	}
 }
@@ -84,75 +89,63 @@ async function processDirectory(inputDir, outputDir, webpOption) {
 
 	getAllFiles(inputDir);
 
-	console.log(`Found ${files.length} image files, starting conversion...`);
+	console.log(`Found ${files.length} files, starting conversion...`);
 
 	let successCount = 0;
-	const startTime = Date.now();
-
 	for (const file of files) {
 		if (await processFile(file, outputDir, webpOption)) {
 			successCount++;
 		}
 	}
-
-	const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-	console.log(`\nConversion completed! Success: ${successCount}/${files.length} files, Time: ${duration}s`);
+	return successCount;
 }
 
 function startInteractiveMode() {
-	const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
 	console.log('Welcome to the Image to WebP Converter!\n');
 	console.log('Usage examples:');
 	console.log('  - Convert single file: -i <file path>');
 	console.log('  - Convert directory: -d <directory path>');
-	console.log('  - More parameters, View help: h or help');
+	console.log('  - More parameters, view help: -h/h or --help/help');
 	console.log('  - Exit program: exit or quit\n');
 
+	const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
 	function promptUser() {
+		const program = createCommand();
+		program.exitOverride();
+		program
+			.option('-i, --input <path>', 'Input file path')
+			.option('-d, --directory <path>', 'Input directory path (choose one with -i)')
+			.option('-o, --output <path>', 'Output directory path (if not specified, just use the same folder from -i or -d)')
+			.option('-q, --quality <number>', 'Image quality (1-100)', '80')
+			.option('-l, --lossless <number>', 'Compression level (1: lossy, 2: medium, 3: lossless)', '1')
+			.option('-m, --minimal <boolean>', 'Force minimal file size regardless of compression level', 'false');
+
 		rl.question('Please enter command parameters: ', async (userInput) => {
-			if (userInput.toLowerCase() === 'exit' || userInput.toLowerCase() === 'quit') {
+			if (userInput.toLowerCase().trim() === 'exit' || userInput.toLowerCase().trim() === 'quit') {
 				console.log('Thank you for using, goodbye!');
 				rl.close();
 				return;
 			}
 
-			if (userInput.includes('-h') || userInput.includes('--help') || userInput.toLowerCase() === 'h' || userInput.toLowerCase() === 'help') {
+			if (userInput.toLowerCase().includes('-h') || userInput.toLowerCase().includes('--help') || userInput.toLowerCase() === 'h' || userInput.toLowerCase() === 'help') {
 				program.outputHelp();
 				promptUser();
 				return;
 			}
 
-			const args = ['node', 'convert2webp.js', ...userInput.split(/\s+/).filter(arg => arg.trim() !== '')];
+			const fullArgs = ['node', 'convert2webp.js', ...userInput.split(/\s+/).filter(arg => arg.trim() !== '')];
 
 			try {
-				process.argv = args;
-				program.opts = function () { return {}; };
-				program.parse(process.argv, { from: 'user' });
-				const options = program.opts();
-
-				const originalExit = process.exit;
-
-				try {
-					process.exit = (code) => {
-						console.error(`Program attempted to exit, code: ${code}`);
-						throw new Error('Process exit prevented');
-					};
-
-					await interactiveProcess();
-				} catch (error) {
-					if (error.message !== 'Process exit prevented') {
-						console.error(`Processing error: ${error.message}`);
-					}
-				} finally {
-					process.exit = originalExit;
-				}
+				program.parse(fullArgs, { from: 'node' });
+				await interactiveProcess(program);
 			} catch (error) {
 				console.error(`Parameter parsing error: ${error.message}`);
+				console.error('Please check your input parameters (name/value/count) and try again.');
 			}
 
 			console.log('\n');
-			rl.close();
+			promptUser();
 		});
 	}
 
@@ -164,25 +157,30 @@ function startInteractiveMode() {
 	});
 }
 
-async function interactiveProcess() {
+async function interactiveProcess(program) {
 	try {
-		const params = checkParameters();
+		const params = checkParameters(program);
 		console.log(`Parameter check passed, preparing to start processing...`);
 
 		const webpOption = prepareWebpOptions(params.quality, params.losslessLevel, params.minimal);
 
+		const startTime = Date.now();
+		let successCount;
+
 		if (params.inputType === 'file') {
-			await processFile(params.inputPath, params.outputPath, webpOption);
+			successCount = await processFile(params.inputPath, params.outputPath, webpOption) ? 1 : 0;
 		} else {
-			await processDirectory(params.inputPath, params.outputPath, webpOption);
+			successCount = await processDirectory(params.inputPath, params.outputPath, webpOption);
 		}
 
+		const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+		console.log(`\nConversion completed! Success: ${successCount} file(s), Time: ${duration}s`);
 	} catch (error) {
 		console.error(`Error occurred during processing: ${error.message}`);
 	}
 }
 
-function checkParameters() {
+function checkParameters(program) {
 	const result = {
 		inputType: '',
 		inputPath: '',
