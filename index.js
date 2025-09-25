@@ -57,12 +57,30 @@ async function processFile(inputFile, outputDir, webpOption) {
 			return false;
 		}
 
+		const orientation = metadata.orientation || 1;
 		const baseName = `${parsed.name}-generated`;
 		const extension = '.webp';
 
 		const { path: outputFilePath, fileName: outputFileName } = getUniqueOutputPath(outputDir, baseName, extension);
 
-		await sharp(inputFile)
+		let image = sharp(inputFile, {
+			exif: {
+				rotate: false
+			}
+		});
+
+		if (orientation === 6) {
+			image = image.rotate(90);
+		} else if (orientation === 8) {
+			image = image.rotate(-90);
+		} else if (orientation === 3) {
+			image = image.rotate(180);
+		} else {
+			image = image.rotate(0);
+		}
+
+		await image
+			.withMetadata({ orientation: 1 })
 			.webp(webpOption)
 			.toFile(outputFilePath);
 
