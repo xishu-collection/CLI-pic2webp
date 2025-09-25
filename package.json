@@ -1,14 +1,17 @@
 {
-	"name": "pic2webp",
+	"name": "xs-pic2webp",
 	"version": "1.0.0",
-	"main": "convert2webp",
-	"private": true,
+	"main": "index.js",
+	"bin": {
+		"xs-pic2webp": "./index.js"
+	},
+	"private": false,
 	"engines": {
 		"pnpm": ">=8.0.0",
 		"node": ">=18.0.0"
 	},
 	"scripts": {
-		"start": "node convert2webp.js"
+		"start": "node index.js"
 	},
 	"author": "XISHU <shallowlong@gmail.com>",
 	"license": "MIT",

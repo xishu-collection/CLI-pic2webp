@@ -99,7 +99,7 @@ There is no network connection function in this tool.
 
 ### Installation
 
-#### Local build:
+#### Local build and install:
 1. Clone the repo
    ```sh
    git clone https://github.com/xishu-collection/CLI-pic2webp.git
@@ -108,9 +108,22 @@ There is no network connection function in this tool.
    ```sh
    pnpm install
    ```
-
-#### Binary executable file:
-TBD
+3. Run the tool in project
+   ```sh
+   pnpm start
+   ```
+4. Link the tool to global environment
+   ```sh
+   npm link
+   ```
+5. Uninstall the tool if needed
+   ```sh
+   npm unlink -g
+   ```
+6. Run the tool in CLI
+   ```sh
+   xs-pic2webp
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -120,10 +133,10 @@ TBD
 ## Usage
 
 ```
-CLI > pnpm start
+CLI > xs-pic2webp
 
-> pic2webp@1.0.0 start
-> node convert2webp.js
+> xs-pic2webp@1.0.0 start
+> node index.js
 
 Welcome to the Image to WebP Converter!
 
@@ -182,7 +195,7 @@ Conversion completed! Success: 1 file(s), Time: 1.1s
 ## Backlogs
 
 - [x] only focus on the .webp format
-- [x] provide handy cli usage (console summary)
+- [x] provide handy cli usage
 - [ ] monitor one folder to automatically convert the pictures to the .webp format
 - [ ] binary executable file for different platforms
 
@@ -239,6 +252,7 @@ Project Link: [https://github.com/xishu-collection/CLI-pic2webp](https://github.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
+* [sharp](https://github.com/lovell/sharp)
 * [xishu-collection](https://github.com/xishu-collection)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
