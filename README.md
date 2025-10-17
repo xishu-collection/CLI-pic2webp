@@ -241,7 +241,7 @@ Distributed under the MIT.
 <!-- CONTACT -->
 ## Contact
 
-XISHU - twitter: [@shallowlong](https://x.com/shallowlong) - email: shallowlong@gmail.com
+Author: xishu2099 - GitHub: [@shallowlong](https://github.com/shallowlong) - Email: shallowlong@gmail.com
 
 Project Link: [https://github.com/xishu-collection/CLI-pic2webp](https://github.com/xishu-collection/CLI-pic2webp)
 

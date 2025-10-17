@@ -13,7 +13,7 @@
 	"scripts": {
 		"start": "node index.js"
 	},
-	"author": "XISHU <shallowlong@gmail.com>",
+	"author": "xishu2099 <shallowlong@gmail.com>",
 	"license": "MIT",
 	"description": "",
 	"dependencies": {
